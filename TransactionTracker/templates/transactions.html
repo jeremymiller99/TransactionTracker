@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+        }
+        .container {
+            width: 95%;
+            max-width: 800px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .filter-section, .transaction-update-form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .filter-section > *, .transaction-update-form > * {
+            flex: 1;
+            min-width: 120px;
+            box-sizing: border-box;
+        }
+        input[type="text"], input[type="date"], input[type="submit"], select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+        input[type="submit"] {
+            color: white;
+            background-color: #4CAF50;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .amount-positive {
+            color: green;
+        }
+        .amount-negative {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Transaction Overview</h1>
+
+        <form action="/view" method="post" class="filter-section">
+            <input type="text" name="search" placeholder="Search descriptions...">
+            <input type="submit" value="Search">
+        </form>
+        
+        <form action="/update-multiple-transactions" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td><input type="checkbox" name="transaction_ids" value="{{ loop.index0 }}"></td>
+                        <td>{{ transaction.Description }}</td>
+                        <td class="{{ 'amount-positive' if transaction.Amount > 0 else 'amount-negative' }}">{{ transaction.Amount }}</td>
+                        <td>{{ transaction.Date }}</td>
+                        <td>
+                            <form action="/tag-transaction" method="post" class="transaction-update-form">
+                                <input type="hidden" name="transaction_id" value="{{ loop.index0 }}">
+                                <select name="category">
+                                    {% for category in categories %}
+                                    <option value="{{ category }}" {% if transaction.UserCategory == category %}selected{% endif %}>{{ category }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="text" name="tag" placeholder="Tag" value="{{ transaction.UserTag }}">
+                                <input type="submit" value="Update">
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">No transactions found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="filter-section">
+                <select name="category">
+                    {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="tag" placeholder="Enter tag">
+                <input type="submit" value="Update Selected">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

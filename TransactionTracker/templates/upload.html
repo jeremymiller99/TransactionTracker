@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Bank Statement</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #f4f4f4; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 { 
+            color: #333; 
+        }
+        p { 
+            margin: 15px 0; 
+        }
+        form { 
+            margin-top: 20px; 
+        }
+        input[type=file] {
+            margin: 20px 0; 
+        }
+        input[type=submit] { 
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50; 
+            color: white; 
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type=submit]:hover { 
+            background-color: #45a049; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Bank Statement</h1>
+        <p>Use this page to upload your bank statement Excel file. You can return to this page to upload a new file at any time.</p>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <input type="submit" value="Upload" />
+        </form>
+    </div>
+</body>
+</html>
